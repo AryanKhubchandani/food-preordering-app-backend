@@ -52,4 +52,11 @@ router.get("/order/:id", function (req, res, next) {
   });
 });
 
+// delete an order from db
+router.delete("/order/:id", function (req, res, next) {
+  Order.findOneAndDelete({ userId: req.params.id }).then(function (order) {
+    res.send(order);
+  });
+});
+
 module.exports = router;
