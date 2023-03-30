@@ -46,9 +46,15 @@ router.post("/order", function (req, res, next) {
 });
 
 // get a list of orders from db
-router.get("/order/:id", function (req, res, next) {
-  Order.find({ userId: req.params.id }).then(function (orders) {
-    res.send(orders);
+router.put("/order/:id", function (req, res, next) {
+  Order.findOneAndUpdate(
+    { userId: req.params.id },
+    {
+      new: true,
+    }
+  ).then(function (order) {
+    order.readyBy = "10";
+    res.send(order);
   });
 });
 
@@ -59,15 +65,29 @@ router.delete("/order/:id", function (req, res, next) {
   });
 });
 
-// update order readyBy time
-router.put("/order/:id", function (req, res, next) {
+// update order readyBy time by admin
+router.put("/admin/:id", function (req, res, next) {
   Order.findOneAndUpdate({ userId: req.params.id })
     .then(function (order) {
-      order.readyBy = "10";
+      order.adminTime = addMinutes(new Date(), 10);
       order.save();
       res.send(order);
     })
     .catch(next);
 });
+
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
+function getTime(req) {
+  // subtract new date from current date
+  const time = Date(req.body.adminTime) - Date(req.body.updateAt);
+  console.log(Date(req.body.adminTime));
+  console.log(time);
+  const date = new Date(time);
+  const minutes = date.getMinutes();
+  return `${minutes}`;
+}
 
 module.exports = router;

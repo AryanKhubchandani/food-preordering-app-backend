@@ -10,6 +10,7 @@ const OrderSchema = new Schema({
     required: [true, "Order items are required"],
   },
   total: { type: Number, required: [true, "Total amoung is required"] },
+  adminTime: { type: Date },
   readyBy: { type: String, default: "Calculating..." },
 });
 
