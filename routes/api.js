@@ -39,6 +39,10 @@ router.post("/items", function (req, res, next) {
 
 // post an order to db
 router.post("/order", function (req, res, next) {
+  // if userId already exists, show error
+  if (Order.findOne({ userId: req.body.userId })) {
+    res.status(409).send({ error: "Another order already in progrss" });
+  }
   Order.create(req.body)
     .then(function (order) {
       res.send(order);
