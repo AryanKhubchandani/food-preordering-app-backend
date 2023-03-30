@@ -10,7 +10,7 @@ const OrderSchema = new Schema({
     required: [true, "Order items are required"],
   },
   total: { type: Number, required: [true, "Total amoung is required"] },
-  readyBy: { type: Date },
+  // readyBy: { type: Date, default: "Calculating..." },
 });
 
 OrderSchema.set("timestamps", true);
