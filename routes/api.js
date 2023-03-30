@@ -59,4 +59,15 @@ router.delete("/order/:id", function (req, res, next) {
   });
 });
 
+// update order readyBy time
+router.put("/order/:id", function (req, res, next) {
+  Order.findOneAndUpdate({ userId: req.params.id })
+    .then(function (order) {
+      order.readyBy = "10";
+      order.save();
+      res.send(order);
+    })
+    .catch(next);
+});
+
 module.exports = router;
