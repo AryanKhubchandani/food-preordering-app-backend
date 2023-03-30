@@ -3,6 +3,7 @@ const router = express.Router();
 const Cafe = require("../models/cafe");
 const Item = require("../models/item");
 const Order = require("../models/order");
+const { addMinutes, getTime } = require("../middleware/time");
 
 // get a list of cafes from db
 router.get("/cafes", function (req, res, next) {
@@ -53,7 +54,7 @@ router.put("/order/:id", function (req, res, next) {
       new: true,
     }
   ).then(function (order) {
-    order.readyBy = "10";
+    order.readyBy = getTime(order);
     res.send(order);
   });
 });
@@ -69,25 +70,11 @@ router.delete("/order/:id", function (req, res, next) {
 router.put("/admin/:id", function (req, res, next) {
   Order.findOneAndUpdate({ userId: req.params.id })
     .then(function (order) {
-      order.adminTime = addMinutes(new Date(), 10);
+      order.adminTime = addMinutes(new Date(), req.body.prepTime);
       order.save();
       res.send(order);
     })
     .catch(next);
 });
-
-function addMinutes(date, minutes) {
-  return new Date(date.getTime() + minutes * 60000);
-}
-
-function getTime(req) {
-  // subtract new date from current date
-  const time = Date(req.body.adminTime) - Date(req.body.updateAt);
-  console.log(Date(req.body.adminTime));
-  console.log(time);
-  const date = new Date(time);
-  const minutes = date.getMinutes();
-  return `${minutes}`;
-}
 
 module.exports = router;
