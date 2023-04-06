@@ -4,7 +4,7 @@ const Cafe = require("../models/cafe");
 const Item = require("../models/item");
 const Order = require("../models/order");
 const { addMinutes, getTime } = require("../middleware/time");
-const { generateOTP } = require("../middleware/otp");
+const generateOTP = require("../middleware/otp");
 
 // get a list of cafes from db
 router.get("/cafes", function (req, res, next) {
@@ -50,6 +50,7 @@ router.post("/order", function (req, res, next) {
     })
     .catch(next);
 });
+
 // polling orders
 router.put("/order/:id", function (req, res, next) {
   Order.findOneAndUpdate(
@@ -84,6 +85,13 @@ router.put("/admin/:id", function (req, res, next) {
 // get all orders from db
 router.get("/admin", function (req, res, next) {
   Order.find({}).then(function (order) {
+    res.send(order);
+  });
+});
+
+// Delete all orders from db
+router.delete("/admin", function (req, res, next) {
+  Order.deleteMany({}).then(function (order) {
     res.send(order);
   });
 });
