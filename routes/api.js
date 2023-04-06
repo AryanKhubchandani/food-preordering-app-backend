@@ -50,7 +50,7 @@ router.post("/order", function (req, res, next) {
     .catch(next);
 });
 
-// get a list of orders from db
+// polling orders
 router.put("/order/:id", function (req, res, next) {
   Order.findOneAndUpdate(
     { userId: req.params.id },
@@ -79,6 +79,13 @@ router.put("/admin/:id", function (req, res, next) {
       res.send(order);
     })
     .catch(next);
+});
+
+// get all orders from db
+router.get("/admin", function (req, res, next) {
+  Order.find({}).then(function (order) {
+    res.send(order);
+  });
 });
 
 module.exports = router;
