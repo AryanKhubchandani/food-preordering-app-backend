@@ -4,6 +4,7 @@ const Cafe = require("../models/cafe");
 const Item = require("../models/item");
 const Order = require("../models/order");
 const { addMinutes, getTime } = require("../middleware/time");
+const { generateOTP } = require("../middleware/otp");
 
 // get a list of cafes from db
 router.get("/cafes", function (req, res, next) {
@@ -43,13 +44,12 @@ router.post("/order", function (req, res, next) {
   if (Order.findOne({ userId: req.body.userId })) {
     res.status(409).send({ error: "Another order already in progrss" });
   }
-  Order.create(req.body)
+  Order.create({ ...req.body, otp: generateOTP() })
     .then(function (order) {
       res.send(order);
     })
     .catch(next);
 });
-
 // polling orders
 router.put("/order/:id", function (req, res, next) {
   Order.findOneAndUpdate(
