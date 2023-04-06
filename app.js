@@ -2,10 +2,16 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:4000",
+  })
+);
 
 mongoose.set("strictQuery", false);
 mongoose
