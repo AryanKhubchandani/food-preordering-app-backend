@@ -12,10 +12,12 @@ const OrderSchema = new Schema({
   total: { type: Number, required: [true, "Total amoung is required"] },
   adminTime: { type: Date },
   readyBy: { type: String, default: "Calculating..." },
+  otp: { type: String },
 });
 
 OrderSchema.set("timestamps", true);
 
 const Order = mongoose.model("order", OrderSchema);
 
+// module.exports = OrderSchema;
 module.exports = Order;
